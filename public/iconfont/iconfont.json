@@ -1,0 +1,51 @@
+{
+  "id": "4784037",
+  "name": "mls-base-icon",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "10168241",
+      "name": "car",
+      "font_class": "car",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
+    {
+      "icon_id": "3611156",
+      "name": "bed-room",
+      "font_class": "bed-room",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "20810689",
+      "name": "wash-room",
+      "font_class": "wash-room",
+      "unicode": "e78c",
+      "unicode_decimal": 59276
+    },
+    {
+      "icon_id": "437518",
+      "name": "phone",
+      "font_class": "phone",
+      "unicode": "e725",
+      "unicode_decimal": 59173
+    },
+    {
+      "icon_id": "8620115",
+      "name": "login",
+      "font_class": "login",
+      "unicode": "e7aa",
+      "unicode_decimal": 59306
+    },
+    {
+      "icon_id": "34453208",
+      "name": "email",
+      "font_class": "email",
+      "unicode": "e856",
+      "unicode_decimal": 59478
+    }
+  ]
+}

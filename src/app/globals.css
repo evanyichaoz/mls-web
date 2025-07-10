@@ -14,6 +14,54 @@
   }
 }
 
+@font-face {
+  font-family: "Arima";
+  src: url("/fonts/arima/Arima-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Arima";
+  src: url("/fonts/arima/Arima-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.slide-left {
+  animation: slideInFromLeft 0.5s ease-out forwards;
+}
+
+.slide-right {
+  animation: slideInFromRight 0.5s ease-out forwards;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);

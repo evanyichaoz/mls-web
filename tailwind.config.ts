@@ -12,6 +12,10 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        'instagram': ['Arima', 'Helvetica', 'Arial', 'sans-serif'],
+        'roboto': ['Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+      },
     },
   },
   plugins: [],
