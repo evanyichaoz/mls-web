@@ -1,18 +1,20 @@
 "use client"
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import '@splidejs/splide/dist/css/splide.min.css';
 import Splide from '@splidejs/splide';
 import { Button } from '@mui/material';
+import ContactDialog from './ContactDialog';
 
 const Carousel = () => {
     const splideRef = useRef(null);
+    const [openDialog, setOpenDialog] = useState(false);
 
     const images = [
         'https://ik.imagekit.io/mlsbase/pexels-leorossatti-2598638.jpg?updatedAt=1734381492500',
         'https://ik.imagekit.io/mlsbase/pexels-quirva-4030908.jpg?updatedAt=1734381402803',
         'https://ik.imagekit.io/mlsbase/pexels-fotoaibe-1571459.jpg?updatedAt=1734381402109'
-    ]
+    ];
 
     useEffect(() => {
         if (splideRef.current) {
@@ -28,39 +30,47 @@ const Carousel = () => {
             }).mount();
 
             return () => {
-                // 清理 Splide 实例，防止内存泄漏
                 splideInstance.destroy();
             };
         }
     }, []);
 
     return (
-        <div ref={splideRef} className="splide ">
-            <div className="splide__track">
-                <ul className="splide__list">
-                    {images.map((src, index) => (
-                        <li key={index} className="splide__slide">
-                            <div className='h-full w-full relative'>
-                                <img className='max-w-full h-auto object-contain' src={src} alt={`Slide ${index + 1}`} />
-                                <div className="absolute left-0 top-0 w-full h-full bg-black bg-opacity-40 z-10"></div>
-                                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 text-white md:text-2xl lg:text-4xl font-bold flex flex-col justify-center items-center gap-3">
-                                    <div>What is Your Home Worth?</div>
-                                    <div className='text-sm lg:text-base'>Find out what your home can be worth today</div>
-                                    <Button variant="outlined" sx={{
-                                        color: 'white',
-                                        borderColor: 'white',
-                                        '&:hover': {
-                                            borderColor: 'white',
-                                            backgroundColor: 'rgba(255, 255, 255, 0.1)'
-                                        }
-                                    }}>Get Started</Button>
+        <>
+            <div ref={splideRef} className="splide ">
+                <div className="splide__track">
+                    <ul className="splide__list">
+                        {images.map((src, index) => (
+                            <li key={index} className="splide__slide">
+                                <div className='h-full w-full relative'>
+                                    <img className='max-w-full h-auto object-contain' src={src} alt={`Slide ${index + 1}`} />
+                                    <div className="absolute left-0 top-0 w-full h-full bg-black bg-opacity-40 z-10"></div>
+                                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 text-white md:text-2xl lg:text-4xl font-bold flex flex-col justify-center items-center gap-3">
+                                        <div>What is Your Home Worth?</div>
+                                        <div className='text-sm lg:text-base'>Find out what your home can be worth today</div>
+                                        <Button
+                                            variant="outlined"
+                                            sx={{
+                                                color: 'white',
+                                                borderColor: 'white',
+                                                '&:hover': {
+                                                    borderColor: 'white',
+                                                    backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                                                }
+                                            }}
+                                            onClick={() => setOpenDialog(true)}
+                                        >
+                                            Get Started
+                                        </Button>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
-        </div>
+            <ContactDialog open={openDialog} onClose={() => setOpenDialog(false)} />
+        </>
     );
 };
 

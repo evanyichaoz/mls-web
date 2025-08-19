@@ -3,13 +3,29 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardActionArea, CardContent, CardMedia } from '@mui/material';
 import Grid2 from '@mui/material/Grid2';
 
-// ...existing Listing interface...
+interface Listing {
+  id: string | number;
+  mlsNum: string;
+  status: number;
+  address: string;
+  city: string;
+  province: string;
+  postCode: string;
+  photo: string;
+  bedRoom: number;
+  washRoom: number;
+  parking: number;
+}
 
-const ListingGrid: React.FC = () => {
+interface ListingGridProps {
+  status?: number; // 1: sale, 2: sold
+}
+
+const ListingGrid: React.FC<ListingGridProps> = ({ status = 1 }) => {
   const [listings, setListings] = useState<Listing[]>([]);
 
   useEffect(() => {
-    fetch('/api/listings')
+    fetch(`/api/listings?status=${status}`)
       .then(res => res.json())
       .then(data => {
         setListings(data);
@@ -27,7 +43,7 @@ const ListingGrid: React.FC = () => {
       justifyContent={listings.length === 1 ? "flex-start" : "flex-start"}
     >
       {listings.map((item) => (
-        <Grid2 item={true} xs={12} sm={6} md={4} key={item.id}>
+        <Grid2 xs={12} sm={6} md={4} key={item.id}>
           <Card>
             <CardActionArea>
               <CardMedia

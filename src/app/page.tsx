@@ -24,16 +24,28 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <MidContectSection></MidContectSection>
+        <MidContectSection />
 
-        <div className="flex flex-col">
-          <div className="w-full h-0 flex justify-center py-8 font-semibold">RECENTLY LISTED PROPERTIES </div>
+        <div className="flex flex-col w-full">
+          <div className="w-full flex justify-center py-8 font-semibold">RECENTLY LISTED PROPERTIES</div>
           <div className="w-full flex-1 px-4 py-4">
-            <ListingGrid></ListingGrid>
+            <ListingGrid status={1} />
+          </div>
+        </div>
+
+        <div className="flex flex-col w-full">
+          <div className="w-full flex justify-center py-8 font-semibold">RECENTLY SOLD PROPERTIES</div>
+          <div className="w-full flex-1 px-4 py-4"> 
+            <ListingGrid status={2} />
           </div>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
+      <footer className="row-start-3 flex flex-col items-center justify-center w-full py-8 bg-[#f5f5f5] text-[#333]">
+        <div className="font-semibold text-lg mb-2">Sky Qui | Real Estate Broker</div>
+        <div className="mb-1">Toronto, Ontario</div>
+        <div className="mb-1">Phone: <a href="tel:6478826789" className="underline">(647) 882-6789</a></div>
+        <div className="mb-1">Email: <a href="mailto:canadaqiu@qq.com" className="underline">canadaqiu@qq.com</a></div>
+        <div className="mt-2 text-sm text-gray-500">© {new Date().getFullYear()} Sky Qui. All rights reserved.</div>
       </footer>
     </div>
   );
