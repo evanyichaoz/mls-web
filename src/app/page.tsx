@@ -37,7 +37,7 @@ export default function Home() {
         <div className="flex flex-col w-full">
           <div className="w-full flex justify-center items-center py-8 gap-4">
             <div className="font-semibold">RECENTLY LISTED PROPERTIES</div>
-            {currentUser?.email === 'canadaqiu@qq.com' && (
+            {currentUser?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && (
               <Button variant="contained" onClick={() => setOpenAddListingDialog(true)}>
                 Add Listing
               </Button>

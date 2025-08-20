@@ -1,8 +1,10 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import { Card, CardActionArea, CardContent, CardMedia } from '@mui/material';
+import { Card, CardActionArea, CardContent, CardMedia, Button } from '@mui/material';
 import Grid2 from '@mui/material/Grid2';
 import { Listing } from '@/types';
+import { useAuth } from '@/context/AuthContext';
+import { useAlert } from '@/context/AlertContext';
 
 interface ListingGridProps {
   status?: number; // 1: sale, 2: sold
@@ -10,6 +12,8 @@ interface ListingGridProps {
 
 const ListingGrid: React.FC<ListingGridProps> = ({ status = 1 }) => {
   const [listings, setListings] = useState<Listing[]>([]);
+  const { currentUser } = useAuth();
+  const { showAlert } = useAlert();
 
   useEffect(() => {
     fetch(`/api/listings?status=${status}`)
@@ -23,6 +27,38 @@ const ListingGrid: React.FC<ListingGridProps> = ({ status = 1 }) => {
       });
   }, []);
 
+  const handleDeleteClick = async (listingId: string) => {
+    if (!currentUser) {
+      alert('You must be logged in to delete a listing.');
+      return;
+    }
+
+    if (!window.confirm('Are you sure you want to delete this listing?')) {
+      return;
+    }
+
+    try {
+      const token = await currentUser.getIdToken();
+      const res = await fetch(`/api/listings?id=${listingId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (res.ok) {
+        setListings(listings.filter(listing => listing.id !== listingId));
+        showAlert('Listing deleted successfully!');
+      } else {
+        const data = await res.json();
+        alert(`Failed to delete listing: ${data.error || res.statusText}`);
+      }
+    } catch (error) {
+      console.error('An error occurred during deletion:', error);
+      alert('An error occurred. Please try again.');
+    }
+  };
+
   return (
     <Grid2
       container
@@ -31,7 +67,30 @@ const ListingGrid: React.FC<ListingGridProps> = ({ status = 1 }) => {
     >
       {listings.map((item) => (
         <Grid2 size={{ xs: 12, sm:6, md: 4 }} key={item.id}>
-          <Card>
+          <Card sx={{ position: 'relative' }}>
+            {currentUser?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && (
+              <Button
+                onClick={() => handleDeleteClick(item.id)}
+                sx={{
+                  position: 'absolute',
+                  top: 8,
+                  right: 8,
+                  zIndex: 2,
+                  minWidth: 'auto',
+                  width: 28,
+                  height: 28,
+                  padding: 0,
+                  borderRadius: '50%',
+                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                  color: 'black',
+                  '&:hover': {
+                    backgroundColor: 'white',
+                  },
+                }}
+              >
+                x
+              </Button>
+            )}
             <CardActionArea>
               <CardMedia
                 component="img"

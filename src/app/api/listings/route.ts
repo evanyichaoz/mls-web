@@ -2,6 +2,35 @@ import { db, authAdmin } from '@/lib/firebase-admin';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
+ * Verifies if the request comes from an authenticated admin user.
+ * It checks for a valid Bearer token in the Authorization header, verifies
+ * the token with Firebase Admin, and checks if the user's email matches
+ * the configured admin email.
+ *
+ * @param request The incoming Next.js request object.
+ * @returns A `NextResponse` object with an error if verification fails, otherwise `null`.
+ */
+async function verifyAdmin(request: NextRequest): Promise<NextResponse | null> {
+  const authorization = request.headers.get('Authorization');
+  if (!authorization?.startsWith('Bearer ')) {
+    return NextResponse.json({ error: 'Unauthorized: Missing or invalid token' }, { status: 401 });
+  }
+  const idToken = authorization.split('Bearer ')[1];
+
+  try {
+    const decodedToken = await authAdmin.verifyIdToken(idToken);
+    if (decodedToken.email !== process.env.ADMIN_EMAIL) {
+      return NextResponse.json({ error: 'Forbidden: You do not have permission to perform this action.' }, { status: 403 });
+    }
+  } catch (error) {
+    console.error('Error verifying token:', error);
+    return NextResponse.json({ error: 'Unauthorized: Invalid token' }, { status: 401 });
+  }
+
+  return null; // Indicates success
+}
+
+/**
  * GET /api/listings
  * Fetches a list of listings.
  * @param request The incoming Next.js request object.
@@ -38,30 +67,10 @@ export async function GET(request: NextRequest) {
  * @returns A Response object indicating success or failure.
  */
 export async function POST(request: NextRequest) {
-  // --- Security Checks Start ---
-
-  // 1. Get the authorization token from the request headers.
-  const authorization = request.headers.get('Authorization');
-  if (!authorization?.startsWith('Bearer ')) {
-    return NextResponse.json({ error: 'Unauthorized: Missing or invalid token' }, { status: 401 });
+  const errorResponse = await verifyAdmin(request);
+  if (errorResponse) {
+    return errorResponse;
   }
-  const idToken = authorization.split('Bearer ')[1];
-
-  // 2. Verify the token using Firebase Admin SDK.
-  let decodedToken;
-  try {
-    decodedToken = await authAdmin.verifyIdToken(idToken);
-  } catch (error) {
-    console.error('Error verifying token:', error);
-    return NextResponse.json({ error: 'Unauthorized: Invalid token' }, { status: 401 });
-  }
-
-  // 3. Check for admin privileges (specific email).
-  if (decodedToken.email !== 'canadaqiu@qq.com') {
-    return NextResponse.json({ error: 'Forbidden: You do not have permission to perform this action.' }, { status: 403 });
-  }
-
-  // --- Security Checks End ---
 
   // Only users who pass all security checks can proceed.
   try {
@@ -81,5 +90,34 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error creating listing:', error);
     return NextResponse.json({ error: 'Failed to add listing to database' }, { status: 500 });
+  }
+}
+
+/**
+ * DELETE /api/listings
+ * Securely deletes a listing. This endpoint is protected and requires
+ * authentication and specific admin permissions.
+ * @param request The incoming Next.js request object, expecting an 'id' query parameter.
+ * @returns A Response object indicating success or failure.
+ */
+export async function DELETE(request: NextRequest) {
+  const errorResponse = await verifyAdmin(request);
+  if (errorResponse) {
+    return errorResponse;
+  }
+
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get('id');
+
+  if (!id) {
+    return NextResponse.json({ error: 'Listing ID parameter is required' }, { status: 400 });
+  }
+
+  try {
+    await db.collection('mls-data').doc(id).delete();
+    return NextResponse.json({ success: true, message: `Listing ${id} deleted successfully.` });
+  } catch (error) {
+    console.error(`Failed to delete listing ${id}:`, error);
+    return NextResponse.json({ error: 'Failed to delete listing' }, { status: 500 });
   }
 }
