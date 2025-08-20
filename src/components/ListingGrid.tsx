@@ -27,7 +27,7 @@ const ListingGrid: React.FC<ListingGridProps> = ({ status = 1 }) => {
       });
   }, []);
 
-  const handleDeleteClick = async (listingId: string) => {
+  const handleDeleteClick = async (listingId: string | number) => {
     if (!currentUser) {
       alert('You must be logged in to delete a listing.');
       return;
@@ -66,7 +66,7 @@ const ListingGrid: React.FC<ListingGridProps> = ({ status = 1 }) => {
       columnSpacing={{ xs: 0, sm: 3 }}
     >
       {listings.map((item) => (
-        <Grid2 size={{ xs: 12, sm:6, md: 4 }} key={item.id}>
+        <Grid2 size={{ xs: 12, sm: 6, md: 4 }} key={item.id}>
           <Card sx={{ position: 'relative' }}>
             {currentUser?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && (
               <Button
@@ -97,8 +97,8 @@ const ListingGrid: React.FC<ListingGridProps> = ({ status = 1 }) => {
                 image={item.photo}
                 alt={item.address}
                 sx={{
-                  height: '340px', 
-                  width: '100%', 
+                  height: '340px',
+                  width: '100%',
                   objectFit: 'cover',
                   transition: 'transform 0.3s ease',
                   '&:hover': {
@@ -109,7 +109,11 @@ const ListingGrid: React.FC<ListingGridProps> = ({ status = 1 }) => {
               <CardContent>
                 <div className='flex gap-3 items-center mb-1'>
                   <div className='text-xl'>
-                    {item.mlsNum}
+                    {item.price ? item.price.toLocaleString('en-US', {
+                      style: 'currency', currency: 'USD',
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    }) : 'N/A'}
                   </div>
                   <div className='px-2 bg-[#b39f68] rounded-sm text-sm h-[fit-content]'>
                     {item.status === 1 ? 'For Sale' : 'Sold'}

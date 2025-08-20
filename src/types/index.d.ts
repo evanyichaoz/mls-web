@@ -10,4 +10,6 @@ export interface Listing {
   bedRoom: string;
   bathRoom: string;
   parking: string;
+  price: number;
+  soldPrice: number;
 }

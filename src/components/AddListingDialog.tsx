@@ -18,6 +18,8 @@ const initialFormState = {
   bathRoom: "",
   parking: "",
   photo: "",
+  price: 0,
+  soldPrice: 0,
   status: 1, // 1 for sale, 2 for sold
 };
 
@@ -59,6 +61,8 @@ const AddListingDialog: React.FC<AddListingDialogProps> = ({ open, onClose }) =>
         parking: parsedData.parking ?? "",
         photo: parsedData.photo ?? "",
         status: parsedData.status ?? 1,
+        price: parsedData.price ?? 0,
+        soldPrice: parsedData.soldPrice ?? 0,
       });
       setJsonInput(""); // Clear the input after successful parsing
     } catch (e) {
@@ -137,6 +141,8 @@ const AddListingDialog: React.FC<AddListingDialogProps> = ({ open, onClose }) =>
         <TextField margin="dense" label="Bathrooms" name="bathRoom" fullWidth variant="standard" value={form.bathRoom} onChange={handleChange} />
         <TextField margin="dense" label="Parking" name="parking" fullWidth variant="standard" value={form.parking} onChange={handleChange} />
         <TextField margin="dense" label="Photo URL" name="photo" fullWidth variant="standard" value={form.photo} onChange={handleChange} />
+        <TextField margin="dense" label="Price" name="price" type="number" fullWidth variant="standard" value={form.price} onChange={handleChange} />
+        <TextField margin="dense" label="Sold Price" name="soldPrice" type="number" fullWidth variant="standard" value={form.soldPrice} onChange={handleChange} />
         <FormControl fullWidth margin="dense" variant="standard">
           <InputLabel id="status-label">Status</InputLabel>
           <Select labelId="status-label" name="status" value={form.status} onChange={handleChange} label="Status">
