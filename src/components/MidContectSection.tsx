@@ -46,14 +46,14 @@ const MidContectSection = () => {
         <div className="h-full w-full flex flex-col justify-center items-center">
           <div
             id="slide-left"
-            className={`text-4xl mb-1 text-white font-bold transition-all ${inViewLeft ? "slide-left" : "opacity-0"
+            className={`text-4xl px-4 mb-1 text-white font-bold transition-all ${inViewLeft ? "slide-left" : "opacity-0"
               }`}
           >
             REAL ESTATE DONE RIGHT
           </div>
           <div
             id="slide-right"
-            className={`text-lg text-white mb-4 transition-all ${inViewRight ? "slide-right" : "opacity-0"
+            className={`text-lg px-4 text-white mb-4 transition-all  ${inViewRight ? "slide-right" : "opacity-0"
               }`}
           >
             ARE YOU A FIRST TIME HOME BUYER? ARE YOU LOOKING TO SELL?
