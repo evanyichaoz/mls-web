@@ -57,7 +57,11 @@ export default function Header() {
         <div className='flex-1 flex justify-end text-[14px] gap-4 h-[18px] items-center'>
           <a href={`tel:6478826789`} className={`flex items-center ${isSticky ? '' : 'text-white'}`}><i className="iconfont icon-phone mr-2" style={{ fontSize: '14px' }}></i>(647) 882-6789</a>
           <a href="mailto:canadaqiu@qq.com" className={`flex items-center ${isSticky ? '' : 'text-white'}`}><i className="iconfont icon-email mr-2" style={{ fontSize: '14px' }}></i>canadaqiu@qq.com</a>
-          <div className={`flex items-center ${isSticky ? '' : 'text-white'}`}><i className={`iconfont icon-login ${userData ? 'mr-2' : 'mr-1'}`} style={{ fontSize: '14px' }}></i>
+          <div className={`flex items-center ${isSticky ? '' : 'text-white'}`}>
+            {
+              !userData ? <i className={`iconfont icon-login ${userData ? 'mr-2' : 'mr-1'}`} style={{ fontSize: '14px' }}></i> : null
+            }
+            
             {
               userData ? <div className="flex gap-1 text-[14px] items-center">
                 {userData.firstName} {userData.lastName}

@@ -1,9 +1,17 @@
+"use client";
+
 import Carousel from "@/components/Carousel";
 import ListingGrid from "@/components/ListingGrid";
 import MidContectSection from "@/components/MidContectSection";
-import React from "react";
+import React, { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { Button } from "@mui/material";
+import AddListingDialog from "@/components/AddListingDialog";
 
 export default function Home() {
+  const { currentUser } = useAuth();
+  const [openAddListingDialog, setOpenAddListingDialog] = useState(false);
+
   return (
     <div>
       <main className="flex flex-col items-center sm:items-start pb-10">
@@ -27,7 +35,14 @@ export default function Home() {
         <MidContectSection />
 
         <div className="flex flex-col w-full">
-          <div className="w-full flex justify-center py-8 font-semibold">RECENTLY LISTED PROPERTIES</div>
+          <div className="w-full flex justify-center items-center py-8 gap-4">
+            <div className="font-semibold">RECENTLY LISTED PROPERTIES</div>
+            {currentUser?.email === 'canadaqiu@qq.com' && (
+              <Button variant="contained" onClick={() => setOpenAddListingDialog(true)}>
+                Add Listing
+              </Button>
+            )}
+          </div>
           <div className="w-full flex-1 px-4 py-4">
             <ListingGrid status={1} />
           </div>
@@ -47,6 +62,10 @@ export default function Home() {
         <div className="mb-1">Email: <a href="mailto:canadaqiu@qq.com" className="underline">canadaqiu@qq.com</a></div>
         <div className="mt-2 text-sm text-gray-500">© {new Date().getFullYear()} Sky Qui. All rights reserved.</div>
       </footer>
+      <AddListingDialog
+        open={openAddListingDialog}
+        onClose={() => setOpenAddListingDialog(false)}
+      />
     </div>
   );
 }

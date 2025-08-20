@@ -2,20 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardActionArea, CardContent, CardMedia } from '@mui/material';
 import Grid2 from '@mui/material/Grid2';
-
-interface Listing {
-  id: string | number;
-  mlsNum: string;
-  status: number;
-  address: string;
-  city: string;
-  province: string;
-  postCode: string;
-  photo: string;
-  bedRoom: number;
-  washRoom: number;
-  parking: number;
-}
+import { Listing } from '@/types';
 
 interface ListingGridProps {
   status?: number; // 1: sale, 2: sold
@@ -78,7 +65,7 @@ const ListingGrid: React.FC<ListingGridProps> = ({ status = 1 }) => {
                   </div>
                   <div className='flex gap-2 items-center'>
                     <i className='iconfont icon-wash-room h-[20px]' style={{ fontSize: '12px' }}></i>
-                    <div className='text-[12px] leading-[14px]'>{item.washRoom}</div>
+                    <div className='text-[12px] leading-[14px]'>{item.bathRoom}</div>
                   </div>
                   <div className='flex gap-2 items-center'>
                     <i className='iconfont icon-car h-[20px]' style={{ fontSize: '12px' }}></i>
