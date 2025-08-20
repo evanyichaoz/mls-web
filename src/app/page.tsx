@@ -24,7 +24,7 @@ export default function Home() {
             <div className="w-full md:w-1/2 mt-3 md:mt-0 px-[16px] text-white flex flex-col gap-2">
               <div className="text-[16px] font-semibold" >Sky Qui</div>
               <div className="flex flex-col gap-3 text-[14px]">Real Estate Broker</div>
-              <div className="flex flex-col gap-3 text-[12px]">
+              <div className="flex flex-col gap-3 text-[12px] md:pr-12">
                 <div>As a passionate and dedicated real estate professional, I am committed to helping clients find their dream homes and make sound investment decisions. With 20 years of experience in the industry, I pride myself on providing personalized services and expert guidance tailored to each individual's needs.</div>
                 <div>Whether you’re buying, selling, or renting, my goal is to make the process as smooth and stress-free as possible. Real estate is not just about properties; it's about the people who live in them. I strive to ensure you feel confident, informed, and supported every step of the way.</div>
                 <div>I look forward to working with you and helping you achieve your real estate goals. Let’s turn your property dreams into reality!</div>
