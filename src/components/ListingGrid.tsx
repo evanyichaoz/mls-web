@@ -26,20 +26,21 @@ const ListingGrid: React.FC<ListingGridProps> = ({ status = 1 }) => {
   return (
     <Grid2
       container
-      spacing={3}
-      justifyContent={listings.length === 1 ? "flex-start" : "flex-start"}
+      rowSpacing={3}
+      columnSpacing={{ xs: 0, sm: 3 }}
     >
       {listings.map((item) => (
-        <Grid2 xs={12} sm={6} md={4} key={item.id}>
+        <Grid2 size={{ xs: 12, sm:6, md: 4 }} key={item.id}>
           <Card>
             <CardActionArea>
               <CardMedia
                 component="img"
-                height="340"
                 image={item.photo}
                 alt={item.address}
                 sx={{
-                  height: '340px',
+                  height: '340px', 
+                  width: '100%', 
+                  objectFit: 'cover',
                   transition: 'transform 0.3s ease',
                   '&:hover': {
                     transform: 'scale(1.05)',
