@@ -61,8 +61,8 @@ export async function GET(request: NextRequest) {
 
 /**
  * POST /api/listings
- * Securely creates a new listing. This endpoint is protected and requires
- * authentication and specific admin permissions.
+ * Securely creates a new listing or updates an existing one based on mlsNum.
+ * This endpoint is protected and requires authentication and specific admin permissions.
  * @param request The incoming Next.js request object, expecting a JSON body for the new listing.
  * @returns A Response object indicating success or failure.
  */
@@ -81,15 +81,30 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const docRef = await db.collection('mls-data').add({
-      ...listingData,
-      createdAt: new Date().toISOString(),
-    });
+    const listingsRef = db.collection('mls-data');
+    const q = listingsRef.where('mlsNum', '==', listingData.mlsNum);
+    const querySnapshot = await q.get();
 
-    return NextResponse.json({ success: true, id: docRef.id }, { status: 201 });
+    if (querySnapshot.empty) {
+      // No existing listing found, create a new one.
+      const docRef = await listingsRef.add({
+        ...listingData,
+        createdAt: new Date().toISOString(),
+      });
+      return NextResponse.json({ success: true, id: docRef.id, operation: 'created' }, { status: 201 });
+    } else {
+      // Existing listing found, update it.
+      // Assuming mlsNum is unique, so we update the first document found.
+      const docToUpdate = querySnapshot.docs[0];
+      await docToUpdate.ref.update({
+        ...listingData,
+        updatedAt: new Date().toISOString(),
+      });
+      return NextResponse.json({ success: true, id: docToUpdate.id, operation: 'updated' }, { status: 200 });
+    }
   } catch (error) {
-    console.error('Error creating listing:', error);
-    return NextResponse.json({ error: 'Failed to add listing to database' }, { status: 500 });
+    console.error('Error processing listing:', error);
+    return NextResponse.json({ error: 'Failed to process listing in database' }, { status: 500 });
   }
 }
 
