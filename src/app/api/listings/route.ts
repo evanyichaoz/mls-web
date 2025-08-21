@@ -1,5 +1,6 @@
 import { db, authAdmin } from '@/lib/firebase-admin';
 import { NextRequest, NextResponse } from 'next/server';
+import imagekit from '@/lib/imagekit';
 
 /**
  * Verifies if the request comes from an authenticated admin user.
@@ -81,6 +82,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
+    // Handle photo upload to ImageKit
+    if (listingData.photo) {
+      try {
+        const uploadResponse = await imagekit.upload({
+          file: listingData.photo, // URL of the original image
+          fileName: `listing-${listingData.mlsNum}`, // A unique file name
+          folder: 'mls-listings',
+          useUniqueFileName: false, // Overwrite if same mlsNum is uploaded again
+        });
+        listingData.photo = uploadResponse.url; // Replace with the new URL from ImageKit
+        listingData.photoFileId = uploadResponse.fileId; // Store the fileId for easy deletion
+      } catch (uploadError) {
+        console.error('ImageKit upload failed:', uploadError);
+        // Returning an error seems safer than proceeding with an old image URL.
+        return NextResponse.json({ error: 'Failed to upload image to ImageKit' }, { status: 500 });
+      }
+    }
+
     const listingsRef = db.collection('mls-data');
     const q = listingsRef.where('mlsNum', '==', listingData.mlsNum);
     const querySnapshot = await q.get();
@@ -129,7 +148,27 @@ export async function DELETE(request: NextRequest) {
   }
 
   try {
-    await db.collection('mls-data').doc(id).delete();
+    const docRef = db.collection('mls-data').doc(id);
+    const docSnapshot = await docRef.get();
+
+    if (!docSnapshot.exists) {
+        return NextResponse.json({ error: 'Listing not found' }, { status: 404 });
+    }
+
+    const listingData = docSnapshot.data();
+
+    // If there's a photo file ID, delete it from ImageKit
+    if (listingData?.photoFileId) {
+        try {
+            await imagekit.deleteFile(listingData.photoFileId);
+        } catch (imageKitError) {
+            // Log the error but don't block the Firestore deletion.
+            // The database record is the source of truth, and we can have cleanup jobs for orphaned images.
+            console.error(`Failed to delete image from ImageKit for listing ${id} (fileId: ${listingData.photoFileId}):`, imageKitError);
+        }
+    }
+
+    await docRef.delete();
     return NextResponse.json({ success: true, message: `Listing ${id} deleted successfully.` });
   } catch (error) {
     console.error(`Failed to delete listing ${id}:`, error);

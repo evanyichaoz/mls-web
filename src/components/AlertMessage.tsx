@@ -4,12 +4,6 @@ import React, { useEffect } from 'react';
 import { Alert, Button } from "@mui/material";
 import { useAlert } from '@/context/AlertContext';
 
-interface AlertProps {
-  message: string;
-  onClose: () => void;
-  duration?: number;
-}
-
 const AlertMessage: React.FC = () => {
   const { alert } = useAlert();
   const [isShow, setIsShow] = React.useState(false);

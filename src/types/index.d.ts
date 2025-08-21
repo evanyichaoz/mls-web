@@ -7,6 +7,7 @@ export interface Listing {
   province: string;
   postCode: string;
   photo: string;
+  photoFileId?: string;
   bedRoom: string;
   bathRoom: string;
   parking: string;

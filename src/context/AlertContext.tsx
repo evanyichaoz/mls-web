@@ -1,5 +1,5 @@
 'use client'
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useCallback  } from 'react';
 
 interface AlertState {
     message: string;
@@ -29,13 +29,13 @@ export const useAlert = (): AlertContextType => {
 export const AlertProvider: React.FC<AlertProviderProps> = ({ children }) => {
     const [alert, setAlert] = useState<AlertState | null>(null);
 
-    const showAlert = (message: string, duration: number = 3000) => {
+    const showAlert = useCallback((message: string, duration = 3000) => {
         setAlert({ message, duration });
-    };
+    }, []);
 
-    const hideAlert = () => {
+    const hideAlert = useCallback(() => {
         setAlert(null);
-    };
+    }, []);
 
     return (
         <AlertContext.Provider value={{ alert, showAlert, hideAlert }}>
