@@ -18,7 +18,7 @@ export default function Home() {
         <Carousel />
         <div className="flex w-full gap-[30px] py-[50px] bg-[#b39f68]">
           <div className="flex mx-auto px-[16px] flex-col md:flex-row">
-            <div className="w-full md:w-1/2 px-[16px] flex justify-center md:justify-end ">
+            <div className="w-full md:w-1/3 px-[16px] flex justify-center md:justify-end ">
               <img className="block max-w-full h-auto" src="https://ik.imagekit.io/mlsbase/avatar.jpg?updatedAt=1734397659049" alt="your-image" />
             </div>
             <div className="w-full md:w-1/2 mt-3 md:mt-0 px-[16px] text-white flex flex-col gap-2">
