@@ -17,6 +17,7 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [languageMenuAnchor, setLanguageMenuAnchor] = useState<null | HTMLElement>(null);
 
+
   const { language, setLanguage, t } = useLanguage();
   const { currentUser, userData, logout } = useAuth();
   const { showAlert } = useAlert();
@@ -80,7 +81,7 @@ export default function Header() {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center', width: 250 }} role="presentation">
       <div className='py-2 px-4'>
-        <div className={`text-[#b39f68] mb-1 pb-1 border-b-[2px] border-[#3d3d3d] font-semibold text-xs sm:text-base`}>{t('broker.name')}</div>
+        <div className={`text-[#b39f68] mb-1 pb-1 border-b-[2px] border-[#3d3d3d] font-semibold`}>{t('broker.name')}</div>
         <div className={`font-semibold text-black`}>{t('broker.title')}</div>
       </div>
       <Divider />
@@ -93,16 +94,25 @@ export default function Header() {
             <ListItemText primary="(647) 882-6789" />
           </ListItemButton>
         </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton component="a" href="mailto:canadaqiu@qq.com">
-            <ListItemIcon>
-              <EmailIcon />
-            </ListItemIcon>
-            <ListItemText primary="canadaqiu@qq.com" />
-          </ListItemButton>
-        </ListItem>
-        <Divider />
-        {userData ? (
+                 <ListItem disablePadding>
+           <ListItemButton component="a" href="mailto:canadaqiu@qq.com">
+             <ListItemIcon>
+               <EmailIcon />
+             </ListItemIcon>
+             <ListItemText primary="canadaqiu@qq.com" />
+           </ListItemButton>
+         </ListItem>
+         <Divider />
+                   <ListItem disablePadding>
+            <ListItemButton onClick={() => handleLanguageChange(language === 'en' ? 'zh' : 'en')}>
+              <ListItemIcon>
+                <LanguageIcon />
+              </ListItemIcon>
+              <ListItemText primary={language === 'en' ? '中文' :  'English'} />
+            </ListItemButton>
+          </ListItem>
+         <Divider />
+         {userData ? (
           <ListItem disablePadding>
             <ListItemButton onClick={handleLogoutClick}>
               <ListItemIcon>
@@ -242,16 +252,18 @@ export default function Header() {
 
       </div>
 
-      <Drawer
-        anchor="right"
-        open={mobileOpen}
-        onClose={handleDrawerToggle}
-        ModalProps={{
-          keepMounted: true, // Better open performance on mobile.
-        }}
-      >
-        {drawer}
-      </Drawer>
+             <Drawer
+         anchor="right"
+         open={mobileOpen}
+         onClose={handleDrawerToggle}
+         ModalProps={{
+           keepMounted: true, // Better open performance on mobile.
+         }}
+       >
+         {drawer}
+       </Drawer>
+
+       
 
       <LoginD
         open={open}
