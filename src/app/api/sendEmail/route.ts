@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     // 邮件内容
     const mailOptions = {
       from: process.env.GMAIL_USER,
-      to: process.env.GMAIL_USER, // 你自己收邮件
+      to: process.env.GMAIL_TO_USER, // 你自己收邮件
       subject: '新客户咨询',
       text: `姓名: ${name}\n电话: ${phone}\n邮箱: ${email}`,
     };
