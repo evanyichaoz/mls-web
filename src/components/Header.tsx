@@ -80,7 +80,7 @@ export default function Header() {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center', width: 250 }} role="presentation">
       <div className='py-2 px-4'>
-        <div className={`text-[#b39f68] mb-1 pb-1 border-b-[2px] border-[#3d3d3d] font-semibold`}>{t('broker.name')}</div>
+        <div className={`text-[#b39f68] mb-1 pb-1 border-b-[2px] border-[#3d3d3d] font-semibold text-xs sm:text-base`}>{t('broker.name')}</div>
         <div className={`font-semibold text-black`}>{t('broker.title')}</div>
       </div>
       <Divider />
@@ -131,8 +131,8 @@ export default function Header() {
         <div className='flex items-center justify-between'>
           {/* Brand */}
           <div>
-            <div className={`text-[#b39f68] mb-1 pb-1 border-b-[2px] ${isSticky ? 'border-[#3d3d3d] text-[#b39f68]' : 'border-[#ffff] text-[#ffff]'} font-semibold`}>{t('broker.name')}</div>
-            <div className={`font-semibold ${isSticky ? 'text-[#b39f68]' : 'text-white'}`}>{t('broker.title')}</div>
+            <div className={`text-[#b39f68] mb-1 pb-1 border-b-[2px] ${isSticky ? 'border-[#3d3d3d] text-[#b39f68]' : 'border-[#ffff] text-[#ffff]'} font-semibold text-xs sm:text-base`}>{t('broker.name')}</div>
+            <div className={`font-semibold ${isSticky ? 'text-[#b39f68]' : 'text-white'} text-xs sm:text-base`}>{t('broker.title')}</div>
           </div>
 
           {/* Desktop Nav */}
@@ -215,11 +215,11 @@ export default function Header() {
                   {/* Mobile-only Contact Info */}
         <div className={`md:hidden flex justify-center items-center gap-x-4 text-xs pt-2 ${isSticky ? 'text-gray-700' : 'hidden'}`}>
             <a href={`tel:6478826789`} className={`flex items-center gap-1`}>
-                <PhoneIcon sx={{ fontSize: '14px' }} />
+                <PhoneIcon sx={{ fontSize: '12px' }} />
                 (647) 882-6789
             </a>
             <a href="mailto:canadaqiu@qq.com" className={`flex items-center gap-1`}>
-                <EmailIcon sx={{ fontSize: '14px' }} />
+                <EmailIcon sx={{ fontSize: '12px' }} />
                 canadaqiu@qq.com
             </a>
         </div>
