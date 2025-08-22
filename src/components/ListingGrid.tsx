@@ -29,7 +29,7 @@ const ListingGrid: React.FC<ListingGridProps> = ({ status = 1 }) => {
       .catch(err => {
         console.error('Failed to fetch listings:', err);
       });
-  }, []);
+  }, [status]);
 
   const handleDeleteClick = async (listingId: string | number) => {
     if (!currentUser) {

@@ -1,6 +1,6 @@
 'use client'
 import { createTheme, ThemeProvider } from '@mui/material';
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 
 
 interface ArimThemeProviderProps {

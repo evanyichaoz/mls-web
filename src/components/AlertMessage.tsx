@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect } from 'react';
-import { Alert, Button } from "@mui/material";
+import { Alert } from "@mui/material";
 import { useAlert } from '@/context/AlertContext';
 
 const AlertMessage: React.FC = () => {

@@ -20,7 +20,7 @@ const Carousel = () => {
 
     useEffect(() => {
         if (splideRef.current) {
-            let splideInstance = new Splide(splideRef.current, {
+            const splideInstance = new Splide(splideRef.current, {
                 type: 'fade',
                 gap: '1rem',
                 pagination: false,
@@ -45,6 +45,7 @@ const Carousel = () => {
                         {images.map((src, index) => (
                             <li key={index} className="splide__slide">
                                 <div className='h-full w-full relative'>
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img className='max-w-full h-auto object-contain' src={src} alt={`Slide ${index + 1}`} />
                                     <div className="absolute left-0 top-0 w-full h-full bg-black bg-opacity-40 z-10"></div>
                                     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 text-white md:text-2xl lg:text-4xl font-bold flex flex-col justify-center items-center gap-3">

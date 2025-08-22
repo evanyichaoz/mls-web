@@ -13,8 +13,9 @@ if (!admin.apps.length) {
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
     });
-  } catch (error: any) {
-    console.error('Firebase admin initialization error', error.stack);
+  } catch (error: unknown) {
+    const err = error as { stack?: string };
+    console.error('Firebase admin initialization error', err.stack);
   }
 }
 export const db = admin.firestore();

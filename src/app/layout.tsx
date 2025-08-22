@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { AlertProvider } from "@/context/AlertContext";
@@ -19,9 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full w-full">
-      <head>
-        <link rel="stylesheet" href="/iconfont/iconfont.css" />
-      </head>
+
       <AuthProvider>
         <AlertProvider>
           <LanguageProvider>

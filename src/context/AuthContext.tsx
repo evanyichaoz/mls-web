@@ -1,7 +1,7 @@
 'use client'
 import { User, UserCredential, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import React, { useContext, useState, useEffect } from "react"
-import { auth, db } from "../../firebase";
+import { auth, db } from "../../firebaseConfig";
 import { DocumentData, doc, setDoc, getDoc } from "firebase/firestore";
 
 export type AuthContent = {
@@ -26,10 +26,12 @@ class FirebaseAuthError extends Error {
 const AuthContext = React.createContext<AuthContent>({
     currentUser: null,
     userData: null,
-    signup: function (email: string, password: string): Promise<UserCredential> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    signup: function (_email: string, _password: string): Promise<UserCredential> {
         throw new Error("Function not implemented.");
     },
-    login: function (email: string, password: string): Promise<UserCredential> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    login: function (_email: string, _password: string): Promise<UserCredential> {
         throw new Error("Function not implemented.");
     },
     logout: function (): Promise<void> {
@@ -54,9 +56,9 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode;
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             return userCredential; // Return the full UserCredential object
-        } catch (error: any) {
-            const errorCode = error.code;
-            const errorMessage = error.message;
+        } catch (error: unknown) {
+            const firebaseError = error as { code: string; message: string };
+            const errorCode = firebaseError.code;
 
             // Handle different error codes
             switch (errorCode) {
@@ -82,8 +84,9 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode;
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             return userCredential;
-        } catch (error: any) {
-            const errorCode = error.code;
+        } catch (error: unknown) {
+            const firebaseError = error as { code: string; message: string };
+            const errorCode = firebaseError.code;
             console.log(error)
 
             // Handle different error codes and throw custom errors with code and message
@@ -137,8 +140,9 @@ export function AuthProvider({ children }: Readonly<{ children: React.ReactNode;
                     firebaseData = docSnap.data();
                 }
                 setUserData(firebaseData);
-            } catch (err: any) {
-                console.log(err.message);
+            } catch (err: unknown) {
+                const error = err as { message?: string };
+                console.log(error.message);
             } finally {
                 setLoading(false);
             }

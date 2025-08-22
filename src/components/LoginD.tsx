@@ -1,8 +1,7 @@
 import { useAuth } from '@/context/AuthContext';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogProps, DialogTitle, Tab, Tabs, TextField } from '@mui/material';
+import { Button, Dialog, DialogActions, TextField } from '@mui/material';
 import React from 'react'
 import Loading from './Loading';
-import { constants } from 'fs/promises';
 
 export interface LoginDialogProps {
     open: boolean;
@@ -82,11 +81,12 @@ export default function LoginD(props: LoginDialogProps) {
             onClose();
             resetInput();
             resetErrorMessages();
-        } catch (err: any) {
+        } catch (err: unknown) {
+            const error = err as { code?: string; message?: string };
             setErrorMessages((prev) => ({
                 ...prev,
-                email: err.code == 'auth/invalid-email' ? err.message : '',
-                general: err.code !== 'auth/invalid-email' ? err.message : '',
+                email: error.code === 'auth/invalid-email' ? error.message || '' : '',
+                general: error.code !== 'auth/invalid-email' ? error.message || '' : '',
             }));
         }
     }
@@ -109,13 +109,14 @@ export default function LoginD(props: LoginDialogProps) {
             resetInput();
             resetErrorMessages();
         }
-        catch (error: any) {
+        catch (error: unknown) {
             const emailErrorCodes = ['auth/invalid-email'];
             const generalErrorCodes = ['auth/invalid-credential', 'auth/too-many-requests', 'auth/network-request-failed']
+            const authError = error as { code?: string; message?: string };
             setErrorMessages((prev) => ({
                 ...prev,
-                email: emailErrorCodes.includes(error.code) ? error.message : '',
-                general: generalErrorCodes.includes(error.code) ? error.message : '',
+                email: emailErrorCodes.includes(authError.code || '') ? authError.message || '' : '',
+                general: generalErrorCodes.includes(authError.code || '') ? authError.message || '' : '',
             }));
         }
     }
