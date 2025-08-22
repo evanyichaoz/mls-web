@@ -130,10 +130,13 @@ export default function Header() {
       <div className='mx-auto px-4'>
         <div className='flex items-center justify-between'>
           {/* Brand */}
-          <div>
+          <div className={`${!isSticky ? 'hidden md:block' : ''}`}>
             <div className={`text-[#b39f68] mb-1 pb-1 border-b-[2px] ${isSticky ? 'border-[#3d3d3d] text-[#b39f68]' : 'border-[#ffff] text-[#ffff]'} font-semibold text-xs sm:text-base`}>{t('broker.name')}</div>
             <div className={`font-semibold ${isSticky ? 'text-[#b39f68]' : 'text-white'} text-xs sm:text-base`}>{t('broker.title')}</div>
           </div>
+
+          {/* Spacer for mobile when brand is hidden */}
+          <div className={`${!isSticky ? 'block md:hidden' : 'hidden'}`}></div>
 
           {/* Desktop Nav */}
           <div className='hidden md:flex flex-1 justify-end text-[14px] gap-4 items-center'>
