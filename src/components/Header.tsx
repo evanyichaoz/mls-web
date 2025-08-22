@@ -80,8 +80,8 @@ export default function Header() {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center', width: 250 }} role="presentation">
       <div className='py-2 px-4'>
-        <div className={`text-[#b39f68] mb-1 pb-1 border-b-[2px] border-[#3d3d3d] font-semibold`}>Sky Qui</div>
-        <div className={`font-semibold text-black`}>Broker</div>
+        <div className={`text-[#b39f68] mb-1 pb-1 border-b-[2px] border-[#3d3d3d] font-semibold`}>{t('broker.name')}</div>
+        <div className={`font-semibold text-black`}>{t('broker.title')}</div>
       </div>
       <Divider />
       <List>
@@ -131,8 +131,8 @@ export default function Header() {
         <div className='flex items-center justify-between'>
           {/* Brand */}
           <div>
-            <div className={`text-[#b39f68] mb-1 pb-1 border-b-[2px] ${isSticky ? 'border-[#3d3d3d] text-[#b39f68]' : 'border-[#ffff] text-[#ffff]'} font-semibold`}>Sky Qui</div>
-            <div className={`font-semibold ${isSticky ? 'text-[#b39f68]' : 'text-white'}`}>Broker</div>
+            <div className={`text-[#b39f68] mb-1 pb-1 border-b-[2px] ${isSticky ? 'border-[#3d3d3d] text-[#b39f68]' : 'border-[#ffff] text-[#ffff]'} font-semibold`}>{t('broker.name')}</div>
+            <div className={`font-semibold ${isSticky ? 'text-[#b39f68]' : 'text-white'}`}>{t('broker.title')}</div>
           </div>
 
           {/* Desktop Nav */}

@@ -46,9 +46,6 @@ const translations = {
     'province': 'Province',
     'postal.code': 'Postal Code',
     'price': 'Price',
-    'bedrooms': 'Bedrooms',
-    'bathrooms': 'Bathrooms',
-    'parking': 'Parking',
     'upload.photo': 'Upload Photo',
     'submit': 'Submit',
     'cancel': 'Cancel',
@@ -68,6 +65,30 @@ const translations = {
     // Home Page
     'recently.listed': 'RECENTLY LISTED PROPERTIES',
     'recently.sold': 'RECENTLY SOLD PROPERTIES',
+    
+    // Carousel
+    'what.is.your.home.worth': 'What is Your Home Worth?',
+    'find.out.worth': 'Find out what your home can be worth today',
+    'get.started': 'Get Started',
+    
+    // Broker Info
+    'broker.name': 'Sky Qui',
+    'broker.title': 'Real Estate Broker',
+    
+    // Footer
+    'location': 'Toronto, Ontario',
+    'footer.phone': 'Phone',
+    'footer.email': 'Email',
+    'all.rights.reserved': 'All rights reserved.',
+    
+    // Broker Description
+    'broker.description.1': 'As a passionate and dedicated real estate professional, I am committed to helping clients find their dream homes and make sound investment decisions. With 20 years of experience in the industry, I pride myself on providing personalized services and expert guidance tailored to each individual\'s needs.',
+    'broker.description.2': 'Whether you\'re buying, selling, or renting, my goal is to make the process as smooth and stress-free as possible. Real estate is not just about properties; it\'s about the people who live in them. I strive to ensure you feel confident, informed, and supported every step of the way.',
+    'broker.description.3': 'I look forward to working with you and helping you achieve your real estate goals. Let\'s turn your property dreams into reality!',
+    
+    // Mid Content Section
+    'real.estate.done.right': 'REAL ESTATE DONE RIGHT',
+    'first.time.buyer.question': 'ARE YOU A FIRST TIME HOME BUYER? ARE YOU LOOKING TO SELL?',
   },
   zh: {
     // Header
@@ -102,9 +123,6 @@ const translations = {
     'province': '省份',
     'postal.code': '邮政编码',
     'price': '价格',
-    'bedrooms': '卧室',
-    'bathrooms': '浴室',
-    'parking': '停车位',
     'upload.photo': '上传照片',
     'submit': '提交',
     'cancel': '取消',
@@ -124,6 +142,30 @@ const translations = {
     // Home Page
     'recently.listed': '最新上市房源',
     'recently.sold': '最近售出房源',
+    
+    // Carousel
+    'what.is.your.home.worth': '您的房子值多少钱？',
+    'find.out.worth': '立即了解您房子的当前价值',
+    'get.started': '开始评估',
+    
+    // Broker Info
+    'broker.name': '邱天',
+    'broker.title': '房地产经纪人',
+    
+    // Footer
+    'location': '多伦多，安大略省',
+    'footer.phone': '电话',
+    'footer.email': '邮箱',
+    'all.rights.reserved': '版权所有。',
+    
+    // Broker Description
+    'broker.description.1': '作为一名充满热情且专业的房地产经纪人，我致力于帮助客户找到理想的居所并做出明智的投资决策。凭借20年的行业经验，我以提供个性化服务和专业指导为荣，为每位客户量身定制解决方案。',
+    'broker.description.2': '无论您是购买、出售还是租赁房产，我的目标都是让整个过程尽可能顺利且无压力。房地产不仅仅是关于房产本身，更是关于居住在其中的人们。我努力确保您在每一步都感到自信、知情并得到支持。',
+    'broker.description.3': '我期待与您合作，帮助您实现房地产目标。让我们将您的房产梦想变为现实！',
+    
+    // Mid Content Section
+    'real.estate.done.right': '专业房地产服务',
+    'first.time.buyer.question': '您是首次购房者吗？您想要出售房产吗？',
   }
 };
 
@@ -148,7 +190,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   };
 
   const t = (key: string): string => {
-    return translations[language][key] || key;
+    return (translations[language] as Record<string, string>)[key] || key;
   };
 
   return (
