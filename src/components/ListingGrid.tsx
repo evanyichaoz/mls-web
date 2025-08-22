@@ -107,18 +107,42 @@ const ListingGrid: React.FC<ListingGridProps> = ({ status = 1 }) => {
                 }}
               />
               <CardContent>
-                <div className='flex gap-3 items-center mb-1'>
-                  <div className='text-xl'>
-                    {item.price ? item.price.toLocaleString('en-US', {
-                      style: 'currency', currency: 'USD',
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 0,
-                    }) : 'N/A'}
+                {item.status === 2 ? (
+                  <div className="mb-1">
+                    <div className='flex gap-3 items-center'>
+                      <div className='text-xl'>
+                        {item.soldPrice ? item.soldPrice.toLocaleString('en-US', {
+                          style: 'currency', currency: 'USD',
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 0,
+                        }) : 'N/A'}
+                      </div>
+                      <div className='px-2 bg-red-700 text-white rounded-sm text-sm h-[fit-content]'>
+                        Sold
+                      </div>
+                    </div>
+                    <div className='text-sm text-gray-500 line-through'>
+                      {item.price ? item.price.toLocaleString('en-US', {
+                        style: 'currency', currency: 'USD',
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      }) : ''} Asking price
+                    </div>
                   </div>
-                  <div className='px-2 bg-[#b39f68] rounded-sm text-sm h-[fit-content]'>
-                    {item.status === 1 ? 'For Sale' : 'Sold'}
+                ) : (
+                  <div className='flex gap-3 items-center mb-1'>
+                    <div className='text-xl'>
+                      {item.price ? item.price.toLocaleString('en-US', {
+                        style: 'currency', currency: 'USD',
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                      }) : 'N/A'}
+                    </div>
+                    <div className='px-2 bg-[#b39f68] rounded-sm text-sm h-[fit-content]'>
+                      For Sale
+                    </div>
                   </div>
-                </div>
+                )}
                 <div className='truncate text-sm mb-1' title={`${item.address}, ${item.city}, ${item.province} ${item.postCode}`}>
                   {item.address}, {item.city}, {item.province} {item.postCode}
                 </div>
