@@ -12,6 +12,11 @@ import imagekit from '@/lib/imagekit';
  * @returns A `NextResponse` object with an error if verification fails, otherwise `null`.
  */
 async function verifyAdmin(request: NextRequest): Promise<NextResponse | null> {
+  // 检查Firebase Admin是否已初始化
+  if (!authAdmin) {
+    return NextResponse.json({ error: 'Server configuration error: Firebase Admin not initialized' }, { status: 500 });
+  }
+
   const authorization = request.headers.get('Authorization');
   if (!authorization?.startsWith('Bearer ')) {
     return NextResponse.json({ error: 'Unauthorized: Missing or invalid token' }, { status: 401 });
@@ -38,6 +43,11 @@ async function verifyAdmin(request: NextRequest): Promise<NextResponse | null> {
  * @returns A Response object containing the list of listings or an error.
  */
 export async function GET(request: NextRequest) {
+  // 检查Firebase Admin是否已初始化
+  if (!db) {
+    return NextResponse.json({ error: 'Server configuration error: Database not initialized' }, { status: 500 });
+  }
+
   const { searchParams } = new URL(request.url);
   const status = searchParams.get('status');
 
@@ -68,6 +78,11 @@ export async function GET(request: NextRequest) {
  * @returns A Response object indicating success or failure.
  */
 export async function POST(request: NextRequest) {
+  // 检查Firebase Admin是否已初始化
+  if (!db) {
+    return NextResponse.json({ error: 'Server configuration error: Database not initialized' }, { status: 500 });
+  }
+
   const errorResponse = await verifyAdmin(request);
   if (errorResponse) {
     return errorResponse;
@@ -83,7 +98,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Handle photo upload to ImageKit
-    if (listingData.photo) {
+    if (listingData.photo && imagekit) {
       try {
         const uploadResponse = await imagekit.upload({
           file: listingData.photo, // URL of the original image
@@ -98,6 +113,9 @@ export async function POST(request: NextRequest) {
         // Returning an error seems safer than proceeding with an old image URL.
         return NextResponse.json({ error: 'Failed to upload image to ImageKit' }, { status: 500 });
       }
+    } else if (listingData.photo && !imagekit) {
+      console.warn('ImageKit not configured, skipping image upload');
+      // Continue without image upload if ImageKit is not configured
     }
 
     const listingsRef = db.collection('mls-data');
@@ -135,6 +153,11 @@ export async function POST(request: NextRequest) {
  * @returns A Response object indicating success or failure.
  */
 export async function DELETE(request: NextRequest) {
+  // 检查Firebase Admin是否已初始化
+  if (!db) {
+    return NextResponse.json({ error: 'Server configuration error: Database not initialized' }, { status: 500 });
+  }
+
   const errorResponse = await verifyAdmin(request);
   if (errorResponse) {
     return errorResponse;
@@ -158,7 +181,7 @@ export async function DELETE(request: NextRequest) {
     const listingData = docSnapshot.data();
 
     // If there's a photo file ID, delete it from ImageKit
-    if (listingData?.photoFileId) {
+    if (listingData?.photoFileId && imagekit) {
         try {
             await imagekit.deleteFile(listingData.photoFileId);
         } catch (imageKitError) {
