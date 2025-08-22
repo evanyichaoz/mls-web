@@ -5,6 +5,7 @@ import Grid2 from '@mui/material/Grid2';
 import { Listing } from '@/types';
 import { useAuth } from '@/context/AuthContext';
 import { useAlert } from '@/context/AlertContext';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface ListingGridProps {
   status?: number; // 1: sale, 2: sold
@@ -14,6 +15,7 @@ const ListingGrid: React.FC<ListingGridProps> = ({ status = 1 }) => {
   const [listings, setListings] = useState<Listing[]>([]);
   const { currentUser } = useAuth();
   const { showAlert } = useAlert();
+  const { t } = useLanguage();
 
   useEffect(() => {
     fetch(`/api/listings?status=${status}`)
@@ -29,11 +31,11 @@ const ListingGrid: React.FC<ListingGridProps> = ({ status = 1 }) => {
 
   const handleDeleteClick = async (listingId: string | number) => {
     if (!currentUser) {
-      alert('You must be logged in to delete a listing.');
+      alert(t('must.login'));
       return;
     }
 
-    if (!window.confirm('Are you sure you want to delete this listing?')) {
+    if (!window.confirm(t('confirm.delete'))) {
       return;
     }
 
@@ -48,14 +50,14 @@ const ListingGrid: React.FC<ListingGridProps> = ({ status = 1 }) => {
 
       if (res.ok) {
         setListings(listings.filter(listing => listing.id !== listingId));
-        showAlert('Listing deleted successfully!');
+        showAlert(t('delete.success'));
       } else {
         const data = await res.json();
-        alert(`Failed to delete listing: ${data.error || res.statusText}`);
+        alert(`${t('delete.failed')} ${data.error || res.statusText}`);
       }
     } catch (error) {
       console.error('An error occurred during deletion:', error);
-      alert('An error occurred. Please try again.');
+      alert(t('error.occurred'));
     }
   };
 
@@ -118,7 +120,7 @@ const ListingGrid: React.FC<ListingGridProps> = ({ status = 1 }) => {
                         }) : 'N/A'}
                       </div>
                       <div className='px-2 bg-red-700 text-white rounded-sm text-sm h-[fit-content]'>
-                        Sold
+                        {t('sold')}
                       </div>
                     </div>
                     <div className='text-sm text-gray-500 line-through'>
@@ -126,7 +128,7 @@ const ListingGrid: React.FC<ListingGridProps> = ({ status = 1 }) => {
                         style: 'currency', currency: 'USD',
                         minimumFractionDigits: 0,
                         maximumFractionDigits: 0,
-                      }) : ''} Asking price
+                      }) : ''} {t('asking.price')}
                     </div>
                   </div>
                 ) : (
@@ -139,7 +141,7 @@ const ListingGrid: React.FC<ListingGridProps> = ({ status = 1 }) => {
                       }) : 'N/A'}
                     </div>
                     <div className='px-2 bg-[#b39f68] rounded-sm text-sm h-[fit-content]'>
-                      For Sale
+                      {t('for.sale')}
                     </div>
                   </div>
                 )}

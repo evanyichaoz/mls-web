@@ -5,11 +5,13 @@ import ListingGrid from "@/components/ListingGrid";
 import MidContectSection from "@/components/MidContectSection";
 import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { useLanguage } from "@/context/LanguageContext";
 import { Button } from "@mui/material";
 import AddListingDialog from "@/components/AddListingDialog";
 
 export default function Home() {
   const { currentUser } = useAuth();
+  const { t } = useLanguage();
   const [openAddListingDialog, setOpenAddListingDialog] = useState(false);
 
   return (
@@ -36,10 +38,10 @@ export default function Home() {
 
         <div className="flex flex-col w-full">
           <div className="w-full flex justify-center items-center py-8 gap-4">
-            <div className="font-semibold">RECENTLY LISTED PROPERTIES</div>
+            <div className="font-semibold">{t('recently.listed')}</div>
             {currentUser?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && (
               <Button variant="contained" onClick={() => setOpenAddListingDialog(true)}>
-                Add Listing
+                {t('add.listing')}
               </Button>
             )}
           </div>
@@ -49,7 +51,7 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col w-full">
-          <div className="w-full flex justify-center py-8 font-semibold">RECENTLY SOLD PROPERTIES</div>
+          <div className="w-full flex justify-center py-8 font-semibold">{t('recently.sold')}</div>
           <div className="w-full flex-1 px-4 py-4"> 
             <ListingGrid status={2} />
           </div>

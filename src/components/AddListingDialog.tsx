@@ -2,6 +2,7 @@
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, Select, MenuItem, InputLabel, FormControl, SelectChangeEvent } from "@mui/material";
 import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface AddListingDialogProps {
   open: boolean;
@@ -29,6 +30,7 @@ const AddListingDialog: React.FC<AddListingDialogProps> = ({ open, onClose }) =>
   const [error, setError] = useState("");
   const [jsonInput, setJsonInput] = useState("");
   const { currentUser } = useAuth();
+  const { t } = useLanguage();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | SelectChangeEvent<number>) => {
     const { name, value } = e.target;
@@ -76,7 +78,7 @@ const AddListingDialog: React.FC<AddListingDialogProps> = ({ open, onClose }) =>
     setError("");
 
     if (!currentUser) {
-      setError("You must be logged in to perform this action.");
+      setError(t('must.login'));
       setLoading(false);
       return;
     }
@@ -101,14 +103,14 @@ const AddListingDialog: React.FC<AddListingDialogProps> = ({ open, onClose }) =>
       const data = await res.json();
 
       if (res.ok) {
-        alert("Listing added successfully!");
+        alert(t('listing.added'));
         handleCloseDialog();
         window.location.reload(); // 刷新页面以看到新数据
       } else {
-        setError(data.error || "Failed to add listing.");
+        setError(data.error || t('failed.add'));
       }
     } catch (err) {
-      setError("An error occurred. Please try again.");
+      setError(t('error.occurred'));
       console.error(err);
     }
     setLoading(false);
@@ -116,7 +118,7 @@ const AddListingDialog: React.FC<AddListingDialogProps> = ({ open, onClose }) =>
 
   return (
     <Dialog open={open} onClose={handleCloseDialog}>
-      <DialogTitle>Add New Listing</DialogTitle>
+      <DialogTitle>{t('add.listing')}</DialogTitle>
       <DialogContent>
         <TextField
           label="Paste Listing JSON here"
@@ -133,29 +135,29 @@ const AddListingDialog: React.FC<AddListingDialogProps> = ({ open, onClose }) =>
           Parse & Fill Form
         </Button>
         <TextField margin="dense" label="MLS Number" name="mlsNum" fullWidth variant="standard" value={form.mlsNum} onChange={handleChange} required />
-        <TextField margin="dense" label="Address" name="address" fullWidth variant="standard" value={form.address} onChange={handleChange} required />
-        <TextField margin="dense" label="City" name="city" fullWidth variant="standard" value={form.city} onChange={handleChange} required />
-        <TextField margin="dense" label="Province" name="province" fullWidth variant="standard" value={form.province} onChange={handleChange} />
-        <TextField margin="dense" label="Postal Code" name="postCode" fullWidth variant="standard" value={form.postCode} onChange={handleChange} />
-        <TextField margin="dense" label="Bedrooms" name="bedRoom" fullWidth variant="standard" value={form.bedRoom} onChange={handleChange} />
-        <TextField margin="dense" label="Bathrooms" name="bathRoom" fullWidth variant="standard" value={form.bathRoom} onChange={handleChange} />
-        <TextField margin="dense" label="Parking" name="parking" fullWidth variant="standard" value={form.parking} onChange={handleChange} />
-        <TextField margin="dense" label="Photo URL" name="photo" fullWidth variant="standard" value={form.photo} onChange={handleChange} />
-        <TextField margin="dense" label="Price" name="price" type="number" fullWidth variant="standard" value={form.price} onChange={handleChange} />
+        <TextField margin="dense" label={t('address')} name="address" fullWidth variant="standard" value={form.address} onChange={handleChange} required />
+        <TextField margin="dense" label={t('city')} name="city" fullWidth variant="standard" value={form.city} onChange={handleChange} required />
+        <TextField margin="dense" label={t('province')} name="province" fullWidth variant="standard" value={form.province} onChange={handleChange} />
+        <TextField margin="dense" label={t('postal.code')} name="postCode" fullWidth variant="standard" value={form.postCode} onChange={handleChange} />
+        <TextField margin="dense" label={t('bedrooms')} name="bedRoom" fullWidth variant="standard" value={form.bedRoom} onChange={handleChange} />
+        <TextField margin="dense" label={t('bathrooms')} name="bathRoom" fullWidth variant="standard" value={form.bathRoom} onChange={handleChange} />
+        <TextField margin="dense" label={t('parking')} name="parking" fullWidth variant="standard" value={form.parking} onChange={handleChange} />
+        <TextField margin="dense" label={t('upload.photo')} name="photo" fullWidth variant="standard" value={form.photo} onChange={handleChange} />
+        <TextField margin="dense" label={t('price')} name="price" type="number" fullWidth variant="standard" value={form.price} onChange={handleChange} />
         <TextField margin="dense" label="Sold Price" name="soldPrice" type="number" fullWidth variant="standard" value={form.soldPrice} onChange={handleChange} />
         <FormControl fullWidth margin="dense" variant="standard">
           <InputLabel id="status-label">Status</InputLabel>
           <Select labelId="status-label" name="status" value={form.status} onChange={handleChange} label="Status">
-            <MenuItem value={1}>For Sale</MenuItem>
-            <MenuItem value={2}>Sold</MenuItem>
+            <MenuItem value={1}>{t('for.sale')}</MenuItem>
+            <MenuItem value={2}>{t('sold')}</MenuItem>
           </Select>
         </FormControl>
         {error && <div style={{ color: "red", marginTop: 8 }}>{error}</div>}
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCloseDialog} disabled={loading}>Cancel</Button>
+        <Button onClick={handleCloseDialog} disabled={loading}>{t('cancel')}</Button>
         <Button onClick={handleSubmit} disabled={loading}>
-          {loading ? "Adding..." : "Add Listing"}
+          {loading ? "Adding..." : t('submit')}
         </Button>
       </DialogActions>
     </Dialog>

@@ -1,6 +1,7 @@
 "use client";
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button } from "@mui/material";
 import React, { useState } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface ContactDialogProps {
   open: boolean;
@@ -13,6 +14,7 @@ const ContactDialog: React.FC<ContactDialogProps> = ({ open, onClose }) => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
   const [validationError, setValidationError] = useState("");
+  const { t } = useLanguage();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -39,7 +41,7 @@ const ContactDialog: React.FC<ContactDialogProps> = ({ open, onClose }) => {
         setSuccess(true);
         setForm({ name: "", phone: "", email: "" });
       } else {
-        setError(data.error || "Failed to send email");
+        setError(data.error || t('failed.send'));
       }
     } catch {
       setError("Network error");
@@ -49,11 +51,11 @@ const ContactDialog: React.FC<ContactDialogProps> = ({ open, onClose }) => {
 
   return (
     <Dialog open={open} onClose={() => { onClose(); setSuccess(false); setError(""); }}>
-        <DialogTitle>Contact Me</DialogTitle>
+        <DialogTitle>{t('contact.us')}</DialogTitle>
       <DialogContent>
         <TextField
           margin="dense"
-          label="Name"
+          label={t('name')}
           name="name"
           fullWidth
           variant="standard"
@@ -63,7 +65,7 @@ const ContactDialog: React.FC<ContactDialogProps> = ({ open, onClose }) => {
         />
         <TextField
           margin="dense"
-          label="Phone"
+          label={t('phone')}
           name="phone"
           fullWidth
           variant="standard"
@@ -72,7 +74,7 @@ const ContactDialog: React.FC<ContactDialogProps> = ({ open, onClose }) => {
         />
         <TextField
           margin="dense"
-          label="Email"
+          label={t('email')}
           name="email"
           fullWidth
           variant="standard"
@@ -81,12 +83,12 @@ const ContactDialog: React.FC<ContactDialogProps> = ({ open, onClose }) => {
         />
         {validationError && <div style={{ color: "red", marginTop: 8 }}>{validationError}</div>}
         {error && <div style={{ color: "red", marginTop: 8 }}>{error}</div>}
-        {success && <div style={{ color: "green", marginTop: 8 }}>Email sent successfully!</div>}
+        {success && <div style={{ color: "green", marginTop: 8 }}>{t('message.sent')}</div>}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} disabled={loading}>Cancel</Button>
+        <Button onClick={onClose} disabled={loading}>{t('cancel')}</Button>
         <Button onClick={handleSubmit} disabled={loading || !form.name || (!form.phone && !form.email)}>
-          {loading ? "Sending..." : "Send"}
+          {loading ? "Sending..." : t('send')}
         </Button>
       </DialogActions>
     </Dialog>

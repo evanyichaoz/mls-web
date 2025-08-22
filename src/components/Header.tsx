@@ -1,18 +1,25 @@
 "use client"
 import { useAlert } from '@/context/AlertContext';
 import { useAuth } from '@/context/AuthContext';
+import { useLanguage } from '@/context/LanguageContext';
 import React, { useEffect, useState } from 'react'
 import LoginD from './LoginD';
-import { Button, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Box, Divider, ListItemIcon } from '@mui/material';
+import { Button, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Box, Divider, ListItemIcon, Menu, MenuItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
+import LanguageIcon from '@mui/icons-material/Language';
 
 export default function Header() {
   const [isSticky, setIsSticky] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [languageMenuAnchor, setLanguageMenuAnchor] = useState<null | HTMLElement>(null);
+
+  const { language, setLanguage, t } = useLanguage();
+  const { currentUser, userData, logout } = useAuth();
+  const { showAlert } = useAlert();
 
   const handleScroll = () => {
     // 判断页面滚动的距离
@@ -37,13 +44,13 @@ export default function Header() {
   };
 
   const [open, setOpen] = React.useState(false);
-  const { currentUser, userData, logout } = useAuth();
-  const { showAlert } = useAlert()
+  
   useEffect(() => {
     if (currentUser && userData?.firstName) {
-      showAlert('welcome ' + userData.firstName + ' ' + (userData.lastName || ''));
+      showAlert(t('welcome') + ' ' + userData.firstName + ' ' + (userData.lastName || ''));
     }
-  }, [currentUser, userData, showAlert])
+  }, [currentUser, userData, showAlert, t])
+  
   const handleLoginOpen = () => {
     setOpen(true);
   };
@@ -54,8 +61,21 @@ export default function Header() {
 
   const handleLogoutClick = () => {
     logout();
-    showAlert('success logout');
+    showAlert(t('success.logout'));
   }
+
+  const handleLanguageMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setLanguageMenuAnchor(event.currentTarget);
+  };
+
+  const handleLanguageMenuClose = () => {
+    setLanguageMenuAnchor(null);
+  };
+
+  const handleLanguageChange = (newLanguage: 'en' | 'zh') => {
+    setLanguage(newLanguage);
+    handleLanguageMenuClose();
+  };
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center', width: 250 }} role="presentation">
@@ -88,7 +108,7 @@ export default function Header() {
               <ListItemIcon>
                 <LogoutIcon />
               </ListItemIcon>
-              <ListItemText primary={`Logout (${userData.firstName})`} />
+              <ListItemText primary={`${t('logout')} (${userData.firstName})`} />
             </ListItemButton>
           </ListItem>
         ) : (
@@ -97,7 +117,7 @@ export default function Header() {
               <ListItemIcon>
                 <LoginIcon />
               </ListItemIcon>
-              <ListItemText primary="Login / Sign up" />
+              <ListItemText primary={t('login.signup')} />
             </ListItemButton>
           </ListItem>
         )}
@@ -125,6 +145,48 @@ export default function Header() {
               <EmailIcon sx={{ fontSize: '16px' }} />
               canadaqiu@qq.com
             </a>
+            
+            {/* Language Switcher */}
+            <div className={`flex items-center ${isSticky ? '' : 'text-white'}`}>
+              <Button
+                onClick={handleLanguageMenuOpen}
+                size='small'
+                startIcon={<LanguageIcon />}
+                sx={{ 
+                  color: isSticky ? 'black' : 'white', 
+                  fontSize: '14px', 
+                  fontWeight: 'normal', 
+                  textTransform: 'none',
+                  minWidth: 'auto',
+                  padding: '4px 8px',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <span className="text-center pt-1">{language === 'en' ? 'EN' : '中'}</span>
+              </Button>
+              <Menu
+                anchorEl={languageMenuAnchor}
+                open={Boolean(languageMenuAnchor)}
+                onClose={handleLanguageMenuClose}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+              >
+                <MenuItem onClick={() => handleLanguageChange('en')}>
+                  {t('english')}
+                </MenuItem>
+                <MenuItem onClick={() => handleLanguageChange('zh')}>
+                  {t('chinese')}
+                </MenuItem>
+              </Menu>
+            </div>
+            
             <div className={`flex items-center ${isSticky ? '' : 'text-white'}`}>
               {userData ? (
                 <div className="flex gap-1 text-[14px] items-center">
@@ -134,7 +196,7 @@ export default function Header() {
                     fontSize: '14px',
                     fontWeight: 'normal',
                   }} >
-                    Logout
+                    {t('logout')}
                   </Button>
                 </div>
               ) : (
@@ -144,7 +206,7 @@ export default function Header() {
                   startIcon={<LoginIcon />}
                   sx={{ color: isSticky ? 'black' : 'white', fontSize: '14px', fontWeight: 'normal', textTransform: 'none', '& .MuiButton-startIcon': { marginRight: '4px' } }}
                 >
-                  Login / Sign up
+                  {t('login.signup')}
                 </Button>
               )}
             </div>

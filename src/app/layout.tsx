@@ -6,6 +6,7 @@ import { AlertProvider } from "@/context/AlertContext";
 import AlertMessage from "@/components/AlertMessage";
 import Header from "@/components/Header";
 import { ArimThemeProvider } from "@/context/ArimThemeProvider";
+import { LanguageProvider } from "@/context/LanguageContext";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,17 +24,19 @@ export default function RootLayout({
       </head>
       <AuthProvider>
         <AlertProvider>
-          <ArimThemeProvider>
-            <body
-              className={`antialiased font-instagram  h-full w-full`}
-            >
-              <AlertMessage></AlertMessage>
-              <main className="relative h-full w-full">
-                <Header></Header>
-                {children}
-              </main>
-            </body>
-          </ArimThemeProvider>
+          <LanguageProvider>
+            <ArimThemeProvider>
+              <body
+                className={`antialiased font-instagram  h-full w-full`}
+              >
+                <AlertMessage></AlertMessage>
+                <main className="relative h-full w-full">
+                  <Header></Header>
+                  {children}
+                </main>
+              </body>
+            </ArimThemeProvider>
+          </LanguageProvider>
         </AlertProvider>
       </AuthProvider>
     </html>

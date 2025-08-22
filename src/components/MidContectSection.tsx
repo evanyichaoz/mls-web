@@ -2,11 +2,13 @@
 import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import ContactDialog from "./ContactDialog";
+import { useLanguage } from "@/context/LanguageContext";
 
 const MidContectSection = () => {
   const [inViewLeft, setInViewLeft] = useState(false);
   const [inViewRight, setInViewRight] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const observerLeft = new IntersectionObserver((entries) => {
@@ -70,7 +72,7 @@ const MidContectSection = () => {
             }}
             onClick={() => setOpenDialog(true)}
           >
-            CONTACT
+            {t('contact.us')}
           </Button>
         </div>
       </div>
